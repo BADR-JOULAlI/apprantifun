@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting with Apples - ApprentiFun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #88B04B;
+            --secondary-color: #F4A261;
+        }
+
+        body {
+            background-color: #F0F5EF;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .apples-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            min-height: 200px;
+        }
+
+        .apple {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .apple:hover {
+            transform: scale(1.1);
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .question {
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .answer-input {
+            max-width: 100px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .score {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+
+        @keyframes correct {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .correct {
+            animation: correct 0.5s ease-in-out;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-container">
+            <h1 class="text-center mb-4">Counting with Apples</h1>
+            
+            <div class="controls">
+                <p>Count the apples and type your answer!</p>
+                <div class="score">Score: <span id="score">0</span></div>
+                <button class="btn btn-primary" onclick="newQuestion()">New Question</button>
+            </div>
+
+            <div class="question">
+                <p id="questionText">How many apples do you see?</p>
+                <div class="apples-container" id="applesContainer"></div>
+                <input type="number" class="form-control answer-input" id="answer" min="0" max="20">
+                <button class="btn btn-primary mt-3" onclick="checkAnswer()">Check Answer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const applesContainer = document.getElementById('applesContainer');
+        const answerInput = document.getElementById('answer');
+        const scoreElement = document.getElementById('score');
+        const questionText = document.getElementById('questionText');
+        
+        let currentCount = 0;
+        let score = 0;
+
+        function createApple() {
+            const apple = document.createElement('img');
+            apple.src = '../img/games/apples.png';
+            apple.className = 'apple';
+            apple.alt = 'Apple';
+            return apple;
+        }
+
+        function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function newQuestion() {
+            applesContainer.innerHTML = '';
+            answerInput.value = '';
+            currentCount = generateRandomNumber(1, 10);
+            
+            for (let i = 0; i < currentCount; i++) {
+                const apple = createApple();
+                apple.style.transform = `rotate(${generateRandomNumber(-20, 20)}deg)`;
+                applesContainer.appendChild(apple);
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(answerInput.value);
+            
+            if (userAnswer === currentCount) {
+                score++;
+                scoreElement.textContent = score;
+                scoreElement.classList.add('correct');
+                setTimeout(() => scoreElement.classList.remove('correct'), 500);
+                
+                questionText.textContent = "Correct! 🎉";
+                setTimeout(() => {
+                    questionText.textContent = "How many apples do you see?";
+                    newQuestion();
+                }, 1500);
+            } else {
+                questionText.textContent = `Try again! Count carefully.`;
+                setTimeout(() => {
+                    questionText.textContent = "How many apples do you see?";
+                }, 1500);
+            }
+        }
+
+        // Handle Enter key
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Start game
+        newQuestion();
+    </script>
+</body>
+</html> 

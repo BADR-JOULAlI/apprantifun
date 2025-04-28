@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Brave Little Turtle - ApprentiFun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #88B04B;
+            --secondary-color: #F4A261;
+        }
+
+        body {
+            background-color: #F0F5EF;
+            font-family: 'Quicksand', sans-serif;
+            line-height: 1.8;
+        }
+
+        .story-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .story-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: 2rem auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .moral {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-indicator {
+            text-align: center;
+            margin: 1rem 0;
+            color: #666;
+        }
+
+        .highlight {
+            background-color: rgba(136, 176, 75, 0.1);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="story-container">
+            <h1 class="text-center mb-4">The Brave Little Turtle</h1>
+            
+            <!-- Page 1 -->
+            <div class="page active" id="page1">
+                <img src="../img/stories/turtle1.jpg" alt="Little Turtle by the pond" class="story-image">
+                <p>In a beautiful pond surrounded by tall reeds and colorful flowers lived a small turtle named Tim. Unlike other turtles who were content to stay in their safe, familiar pond, Tim always dreamed of exploring the world beyond.</p>
+                <div class="highlight">
+                    <p>"There must be so much to see out there," Tim would say, gazing at the distant hills.</p>
+                </div>
+            </div>
+
+            <!-- Page 2 -->
+            <div class="page" id="page2">
+                <img src="../img/stories/turtle2.jpg" alt="Turtle preparing for journey" class="story-image">
+                <p>One morning, Tim decided it was time for an adventure. The other pond animals were worried.</p>
+                <div class="highlight">
+                    <p>"It's dangerous out there!" warned the frogs.</p>
+                    <p>"You're too small!" croaked the toads.</p>
+                    <p>But Tim believed in himself. "I may be small, but I'm brave and determined!"</p>
+                </div>
+            </div>
+
+            <!-- Page 3 -->
+            <div class="page" id="page3">
+                <img src="../img/stories/turtle3.jpg" alt="Turtle facing challenges" class="story-image">
+                <p>Tim's journey wasn't easy. He had to climb over big rocks, cross through tall grass, and navigate around fallen branches. Sometimes he felt tired, but he never gave up.</p>
+                <p>When he met other animals, they were surprised to see such a small turtle on such a big adventure. But Tim's friendly smile and determined spirit won them over, and many offered to help guide him on his way.</p>
+            </div>
+
+            <!-- Page 4 -->
+            <div class="page" id="page4">
+                <img src="../img/stories/turtle4.jpg" alt="Turtle reaching mountain top" class="story-image">
+                <p>Finally, after much effort, Tim reached the top of the highest hill. The view was more beautiful than he had ever imagined! He could see his pond, other ponds, and even mountains in the distance.</p>
+                <div class="highlight">
+                    <p>"Wow!" Tim exclaimed. "Dreams really do come true if you're brave enough to follow them!"</p>
+                </div>
+            </div>
+
+            <!-- Page 5 -->
+            <div class="page" id="page5">
+                <img src="../img/stories/turtle5.jpg" alt="Turtle sharing stories" class="story-image">
+                <p>When Tim returned home, all the pond animals gathered to hear about his adventures. His stories inspired the younger turtles, who realized that being small doesn't mean you can't do big things.</p>
+                <div class="moral">
+                    <h4>Moral of the Story:</h4>
+                    <p>Courage and determination are not measured by size, but by the strength of your heart and the power of your dreams.</p>
+                </div>
+            </div>
+
+            <div class="page-indicator">
+                Page <span id="currentPage">1</span> of 5
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-primary" onclick="changePage(-1)" id="prevBtn" disabled>Previous</button>
+                <button class="btn btn-primary" onclick="changePage(1)" id="nextBtn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 5;
+
+        function changePage(direction) {
+            const oldPage = document.getElementById(`page${currentPage}`);
+            currentPage += direction;
+            const newPage = document.getElementById(`page${currentPage}`);
+            
+            oldPage.classList.remove('active');
+            newPage.classList.add('active');
+            
+            document.getElementById('currentPage').textContent = currentPage;
+            
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+    </script>
+</body>
+</html> 

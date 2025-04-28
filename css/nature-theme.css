@@ -1,0 +1,184 @@
+:root {
+    --primary-color: #88B04B; /* Green Leaf */
+    --secondary-color: #F4A261; /* Earthy Orange */
+    --accent-color: #2A9D8F; /* Deep Teal */
+    --bg-color: #F0F5EF; /* Light Nature Background */
+    --text-color: #2C3E50;
+    --button-gradient: linear-gradient(to right, #88B04B, #2A9D8F);
+    --border-radius: 12px;
+    --box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease-in-out;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23E8F5E9" d="M0,0 L100,0 L100,100 L0,100 Z"/><path fill="%23C8E6C9" d="M0,0 L50,0 L50,50 L0,50 Z"/></svg>');
+    background-repeat: repeat;
+}
+
+.container-xxl {
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: white !important;
+    box-shadow: var(--box-shadow);
+}
+
+.navbar-brand h1 {
+    color: var(--primary-color) !important;
+}
+
+.nav-item .nav-link {
+    color: var(--text-color) !important;
+    transition: var(--transition);
+}
+
+.nav-item .nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Button Styles */
+.btn-primary {
+    background: var(--button-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: var(--accent-color);
+    transition: var(--transition);
+    z-index: -1;
+}
+
+.btn-primary:hover::before {
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(42, 157, 143, 0.3);
+}
+
+/* Footer Styles */
+.footer {
+    background: linear-gradient(to right, #2C3E50, #2A9D8F) !important;
+}
+
+.footer .btn-link {
+    color: rgba(255, 255, 255, 0.7) !important;
+    transition: var(--transition);
+}
+
+.footer .btn-link:hover {
+    color: white !important;
+    transform: translateX(5px);
+}
+
+.footer .btn-social {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.footer .btn-social:hover {
+    background: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+/* Section Styles */
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: var(--button-gradient);
+    border-radius: 3px;
+}
+
+/* Card Styles */
+.card {
+    border: 1px solid rgba(136, 176, 75, 0.2);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow);
+}
+
+/* Image Styles */
+.img-fluid {
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.img-fluid:hover {
+    transform: scale(1.03);
+}
+
+/* Animation Styles */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Spinner Styles */
+.spinner-border {
+    color: var(--primary-color) !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container-xxl {
+        border-radius: 0;
+    }
+    
+    .navbar {
+        padding: 1rem !important;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+} 

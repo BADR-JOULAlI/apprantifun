@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainbow in the Sky - ApprentiFun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #88B04B;
+            --secondary-color: #F4A261;
+        }
+
+        body {
+            background-color: #F0F5EF;
+            font-family: 'Quicksand', sans-serif;
+            line-height: 1.8;
+        }
+
+        .story-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .story-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: 2rem auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .color-box {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .red { background-color: #FF6B6B; }
+        .orange { background-color: #F4A261; }
+        .yellow { background-color: #FFD93D; color: #333; }
+        .green { background-color: #88B04B; }
+        .blue { background-color: #4DABF7; }
+        .indigo { background-color: #4B6584; }
+        .violet { background-color: #9B5DE5; }
+
+        .page-indicator {
+            text-align: center;
+            margin: 1rem 0;
+            color: #666;
+        }
+
+        .rainbow-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 1rem;
+            border-radius: 10px;
+            background: linear-gradient(
+                to right,
+                #FF6B6B,
+                #F4A261,
+                #FFD93D,
+                #88B04B,
+                #4DABF7,
+                #4B6584,
+                #9B5DE5
+            );
+            -webkit-background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="story-container">
+            <h1 class="text-center mb-4">Rainbow in the Sky</h1>
+            
+            <!-- Page 1 -->
+            <div class="page active" id="page1">
+                <img src="../img/stories/rainbow1.jpg" alt="Rainy day" class="story-image">
+                <p>One rainy morning, little Sarah sat by her window, watching the raindrops fall. She was feeling a bit sad because she couldn't go outside to play.</p>
+                <p>"I wish there was something magical about rainy days," she sighed.</p>
+            </div>
+
+            <!-- Page 2 -->
+            <div class="page" id="page2">
+                <img src="../img/stories/rainbow2.jpg" alt="Sun peeking through clouds" class="story-image">
+                <p>Suddenly, the rain began to slow down, and a bright ray of sunlight peeked through the clouds. Sarah noticed something amazing starting to appear in the sky.</p>
+                <div class="rainbow-text">
+                    "Look! A rainbow is forming!"
+                </div>
+            </div>
+
+            <!-- Page 3 -->
+            <div class="page" id="page3">
+                <img src="../img/stories/rainbow3.jpg" alt="Full rainbow" class="story-image">
+                <p>The rainbow stretched across the sky in a beautiful arc. Sarah's grandmother explained that rainbows have seven special colors:</p>
+                <div class="color-box red">Red like roses</div>
+                <div class="color-box orange">Orange like sunset</div>
+                <div class="color-box yellow">Yellow like sunflowers</div>
+                <div class="color-box green">Green like grass</div>
+                <div class="color-box blue">Blue like the ocean</div>
+                <div class="color-box indigo">Indigo like twilight</div>
+                <div class="color-box violet">Violet like lavender</div>
+            </div>
+
+            <!-- Page 4 -->
+            <div class="page" id="page4">
+                <img src="../img/stories/rainbow4.jpg" alt="Children playing" class="story-image">
+                <p>Sarah ran outside with her friends to look at the rainbow. They learned that rainbows appear when sunlight meets raindrops in the air - it's like nature's own magic show!</p>
+                <p>"Now I know why rainy days are special," Sarah smiled. "They bring us rainbows!"</p>
+            </div>
+
+            <!-- Page 5 -->
+            <div class="page" id="page5">
+                <img src="../img/stories/rainbow5.jpg" alt="Children drawing rainbow" class="story-image">
+                <p>That afternoon, Sarah and her friends drew pictures of the rainbow and all the colorful things it reminded them of. They learned that even on cloudy days, there's always a chance for something beautiful to appear.</p>
+                <div class="rainbow-text">
+                    Remember: After every rain comes a rainbow!
+                </div>
+            </div>
+
+            <div class="page-indicator">
+                Page <span id="currentPage">1</span> of 5
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-primary" onclick="changePage(-1)" id="prevBtn" disabled>Previous</button>
+                <button class="btn btn-primary" onclick="changePage(1)" id="nextBtn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 5;
+
+        function changePage(direction) {
+            const oldPage = document.getElementById(`page${currentPage}`);
+            currentPage += direction;
+            const newPage = document.getElementById(`page${currentPage}`);
+            
+            oldPage.classList.remove('active');
+            newPage.classList.add('active');
+            
+            document.getElementById('currentPage').textContent = currentPage;
+            
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Time - ApprentiFun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #88B04B;
+            --secondary-color: #F4A261;
+        }
+
+        body {
+            background-color: #F0F5EF;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .puzzle-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            background-color: #333;
+            padding: 2px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .puzzle-piece {
+            width: 100%;
+            height: 100%;
+            background-size: 300px 300px;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .puzzle-piece:hover {
+            transform: scale(0.95);
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .preview {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-container">
+            <h1 class="text-center mb-4">Puzzle Time</h1>
+            
+            <div class="controls">
+                <p>Click on two pieces to swap them. Complete the image!</p>
+                <button class="btn btn-primary" onclick="resetGame()">New Game</button>
+                <div class="moves">Moves: <span id="moveCount">0</span></div>
+            </div>
+
+            <img src="../img/games/puzzle.png" class="preview" alt="Puzzle Preview">
+            
+            <div class="puzzle-container" id="puzzleContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const puzzleContainer = document.getElementById('puzzleContainer');
+        const moveCounter = document.getElementById('moveCount');
+        let moves = 0;
+        let selectedPiece = null;
+        let pieces = [];
+
+        function createPuzzlePieces() {
+            pieces = Array.from({length: 9}, (_, i) => i);
+            shuffleArray(pieces);
+            
+            puzzleContainer.innerHTML = '';
+            pieces.forEach((index, position) => {
+                const piece = document.createElement('div');
+                piece.className = 'puzzle-piece';
+                piece.style.backgroundImage = 'url(../img/games/puzzle.png)';
+                piece.style.backgroundPosition = `${-(index % 3) * 100}% ${-Math.floor(index / 3) * 100}%`;
+                piece.dataset.index = index;
+                piece.addEventListener('click', () => pieceClick(piece, position));
+                puzzleContainer.appendChild(piece);
+            });
+        }
+
+        function shuffleArray(array) {
+            let isSolvable;
+            do {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                isSolvable = checkSolvable(array);
+            } while (!isSolvable);
+            return array;
+        }
+
+        function checkSolvable(array) {
+            let inversions = 0;
+            for (let i = 0; i < array.length - 1; i++) {
+                for (let j = i + 1; j < array.length; j++) {
+                    if (array[i] > array[j]) inversions++;
+                }
+            }
+            return inversions % 2 === 0;
+        }
+
+        function pieceClick(piece, position) {
+            if (selectedPiece === null) {
+                selectedPiece = {piece, position};
+                piece.style.transform = 'scale(0.9)';
+            } else {
+                // Swap pieces
+                const index1 = pieces[selectedPiece.position];
+                const index2 = pieces[position];
+                
+                pieces[selectedPiece.position] = index2;
+                pieces[position] = index1;
+                
+                const bgPos1 = selectedPiece.piece.style.backgroundPosition;
+                const bgPos2 = piece.style.backgroundPosition;
+                
+                selectedPiece.piece.style.backgroundPosition = bgPos2;
+                piece.style.backgroundPosition = bgPos1;
+                
+                selectedPiece.piece.style.transform = '';
+                selectedPiece = null;
+                
+                moves++;
+                moveCounter.textContent = moves;
+                
+                if (checkWin()) {
+                    setTimeout(() => {
+                        alert(`Congratulations! You solved the puzzle in ${moves} moves!`);
+                        resetGame();
+                    }, 500);
+                }
+            }
+        }
+
+        function checkWin() {
+            return pieces.every((piece, index) => piece === index);
+        }
+
+        function resetGame() {
+            moves = 0;
+            moveCounter.textContent = moves;
+            selectedPiece = null;
+            createPuzzlePieces();
+        }
+
+        // Start game
+        resetGame();
+    </script>
+</body>
+</html> 

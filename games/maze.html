@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Runner - ApprentiFun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #88B04B;
+            --secondary-color: #F4A261;
+        }
+
+        body {
+            background-color: #F0F5EF;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        #mazeCanvas {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            margin: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 0.5rem;
+            }
+            
+            #mazeCanvas {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-container">
+            <h1 class="text-center mb-4">Maze Runner</h1>
+            
+            <div class="controls">
+                <p>Help the character reach the exit! Use arrow keys or buttons to move.</p>
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-primary" onclick="move('up')">↑</button><br>
+                    <button class="btn btn-primary" onclick="move('left')">←</button>
+                    <button class="btn btn-primary" onclick="move('down')">↓</button>
+                    <button class="btn btn-primary" onclick="move('right')">→</button>
+                </div>
+                <button class="btn btn-primary mt-3" onclick="resetGame()">New Game</button>
+            </div>
+
+            <canvas id="mazeCanvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('mazeCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const CELL_SIZE = 40;
+        const ROWS = 10;
+        const COLS = 10;
+        
+        canvas.width = COLS * CELL_SIZE;
+        canvas.height = ROWS * CELL_SIZE;
+        
+        let playerPos = { x: 0, y: 0 };
+        let maze = [];
+        
+        function generateMaze() {
+            // Initialize maze with walls
+            maze = Array(ROWS).fill().map(() => Array(COLS).fill(1));
+            
+            function carve(x, y) {
+                maze[y][x] = 0;
+                
+                const directions = [
+                    [0, -2], // Up
+                    [2, 0],  // Right
+                    [0, 2],  // Down
+                    [-2, 0]  // Left
+                ];
+                
+                // Shuffle directions
+                for (let i = directions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [directions[i], directions[j]] = [directions[j], directions[i]];
+                }
+                
+                // Try each direction
+                for (const [dx, dy] of directions) {
+                    const newX = x + dx;
+                    const newY = y + dy;
+                    
+                    if (newX >= 0 && newX < COLS && newY >= 0 && newY < ROWS && maze[newY][newX] === 1) {
+                        maze[y + dy/2][x + dx/2] = 0;
+                        carve(newX, newY);
+                    }
+                }
+            }
+            
+            // Start from top-left
+            carve(0, 0);
+            
+            // Ensure start and end are open
+            maze[0][0] = 0;
+            maze[ROWS-1][COLS-1] = 0;
+        }
+        
+        function drawMaze() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw maze
+            for (let y = 0; y < ROWS; y++) {
+                for (let x = 0; x < COLS; x++) {
+                    if (maze[y][x] === 1) {
+                        ctx.fillStyle = '#333';
+                        ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+            }
+            
+            // Draw end point
+            ctx.fillStyle = '#F4A261';
+            ctx.fillRect((COLS-1) * CELL_SIZE, (ROWS-1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            
+            // Draw player
+            ctx.fillStyle = '#88B04B';
+            ctx.beginPath();
+            ctx.arc(
+                playerPos.x * CELL_SIZE + CELL_SIZE/2,
+                playerPos.y * CELL_SIZE + CELL_SIZE/2,
+                CELL_SIZE/3,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+        
+        function move(direction) {
+            let newX = playerPos.x;
+            let newY = playerPos.y;
+            
+            switch(direction) {
+                case 'up':
+                    newY--;
+                    break;
+                case 'right':
+                    newX++;
+                    break;
+                case 'down':
+                    newY++;
+                    break;
+                case 'left':
+                    newX--;
+                    break;
+            }
+            
+            // Check if move is valid
+            if (newX >= 0 && newX < COLS && newY >= 0 && newY < ROWS && maze[newY][newX] === 0) {
+                playerPos.x = newX;
+                playerPos.y = newY;
+                drawMaze();
+                
+                // Check if player reached the end
+                if (newX === COLS-1 && newY === ROWS-1) {
+                    setTimeout(() => {
+                        alert('Congratulations! You solved the maze!');
+                        resetGame();
+                    }, 100);
+                }
+            }
+        }
+        
+        function resetGame() {
+            playerPos = { x: 0, y: 0 };
+            generateMaze();
+            drawMaze();
+        }
+        
+        // Handle keyboard controls
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowUp':
+                    move('up');
+                    break;
+                case 'ArrowRight':
+                    move('right');
+                    break;
+                case 'ArrowDown':
+                    move('down');
+                    break;
+                case 'ArrowLeft':
+                    move('left');
+                    break;
+            }
+        });
+        
+        // Start game
+        resetGame();
+    </script>
+</body>
+</html> 
